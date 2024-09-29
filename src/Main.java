@@ -1,43 +1,29 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Main {
     public static void main(String[] args) {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(1);
-        list.add(3);
-        list.add(5);
-        list.add(7);
-        System.out.println(list);
+        ArrayList<Packet> transmittedFile = new ArrayList<>();
+        Machine destination = new Machine();
 
-        int interger = 2;
-        list.add(0, interger);
-
-        int size = list.size();
-        for (int i = 1; i < size; i++) {
-            int current = list.get(i); //current number at index 1
-            int step = i; //Step 1
-            while(step > 0 && list.get(step - 1) > current){ //While step is greater than 0 and value left of step is greater than current val
-                list.set(step, list.get(step - 1)); //Set value at step to value greater than value at step.
-                step--; //Decrement Step
-            }
-            list.set(step, current); //If not, leave as is and set current step to value at step.
+        for (int index = 0; index < 10; index++) {
+            transmittedFile.add(new Packet("Data for packet " + (index + 1), index + 1));
         }
-        System.out.println("sort");
 
+        Collections.shuffle(transmittedFile);
 
-        list.add(0, 8);
-
-        size = list.size();
-        for (int i = 1; i < size; i++) {
-            int current = list.get(i); //current number at index 1
-            int step = i; //Step 1
-            while(step > 0 && list.get(step - 1) > current){ //While step is greater than 0 and value left of step is greater than current val
-                list.set(step, list.get(step - 1)); //Set value at step to value greater than value at step.
-                step--; //Decrement Step
-            }
-            list.set(step, current); //If not, leave as is and set current step to value at step.
+        while (!transmittedFile.isEmpty()) {
+            destination.enqueue(transmittedFile.remove(0));
         }
-        System.out.println("sort");
-        System.out.println(list);
+
+        while (!destination.isEmpty()) {
+            destination.dequeue();
+        }
+
+        ArrayList<Packet> fileFromMemory = destination.getMemory();
+
+        while (!fileFromMemory.isEmpty()) {
+            System.out.println(fileFromMemory.remove(0).getData());
+        }
     }
 }
