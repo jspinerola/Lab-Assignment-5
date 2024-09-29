@@ -14,20 +14,20 @@ public class Machine {
     }
     public void dequeue(){
         Packet packet = buffer.removeFirst();
-        for (int i = 0; i < memory.size() - 1; i++) {
-            Packet nextPacket = memory.get(i + 1);
-            while(packet.getPosition() > nextPacket.getPosition()){
-
-
+        memory.add(0, packet);
+        for (int i = 1; i < memory.size(); i++) {
+            Packet current = memory.get(i);
+            int step = i;
+            while(step > 0 && memory.get(step - 1).getPosition() > current.getPosition()){
+                memory.set(step, memory.get(step - 1));
+                step--;
             }
-             6 0 1 5 3 4 7
-            //while item is greater than the adjacent item, swap.
-
+           memory.set(step, current);
         }
     }
 
     public boolean isEmpty(){
-
+        return buffer.isEmpty();
     }
 
     public ArrayList<Packet> getMemory() {
